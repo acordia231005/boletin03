@@ -4,7 +4,7 @@ import { Alumno } from './model/alumno';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -16,8 +16,13 @@ export class App implements OnInit{
 
   // Carga de datos al principio de la pagina como onload.
    ngOnInit(): void {
+    this.alumnos.push(new Alumno('Juan', 'Pérez', new Date('1998-05-12'), [6, 5, 9]));
+    this.alumnos.push(new Alumno('Ana', 'Gómez', new Date('2001-03-22'), [10, 6, 6]));
+    this.alumnos.push(new Alumno('Luis', 'Martínez', new Date('1995-11-30'), [4, 6, 4]));
+
     console.log("carga de datos: " + this.datos);
     console.log("Alumnos cargados: " + this.compis);
+    console.log("Alumno" + this.alumnos);
   }
 
   //Ejercicio 1
@@ -58,10 +63,56 @@ export class App implements OnInit{
 
   //Ejercicio 7
   //Ejercicio a(moda)
+  public modaAlumnos(alumnos : Alumno[]): void{
+    const notas: number[] = [];
+  for (const alumno of alumnos) {
+    for (const nota of alumno.notas) {
+      notas.push(nota);
+    }
+  }
+
+  let moda = notas[0];
+  let maxVeces = 1;
+
+  for (let i = 1; i < notas.length; i++) {
+    let veces = 0;
+    for (let j = 0; j < notas.length; j++) {
+      if (notas[j] === notas[i]) veces++;
+    }
+
+    if (veces > maxVeces) {
+      maxVeces = veces;
+      moda = notas[i];
+    }
+  }
+
+  console.log('Moda:', moda, 'veces:', maxVeces);
+  }
 
   //Ejercicio b(media)
   public mediaEstudiantes(): void{
-    console.log(this.alumnos.reduce((acum, al) => acum + al.notaMedia()) / this.alumnos.length);
+    let notasTotales: number[] = this.alumnos.flatMap(a=> a. notas);
+    const suma = notasTotales.reduce((acc, n) => acc + n);
+    const total = (suma / notasTotales.length).toFixed(2);
+    console.log('Media de todos los alumnos: ' + total);
   }
 
+  //Ejercicio c(media de los aprobados)
+  public mediaAprobados():void{
+    const aprobados = this.alumnos.flatMap(a => a.notas).filter(n => n >= 5);
+    const suma = aprobados.reduce((acc, n) => acc + n);
+    const media = suma / aprobados.length;
+
+    console.log('Media de los alumnos aprobados: ' + (media).toFixed(2));
+  }
+
+  //Ejercicio d(mayor nota nacidos antes del 2000)
+  public mayorNota(): void{
+    const notasPre2000 = this.alumnos
+      .filter(a => a.fechaNac.getFullYear() < 2000)
+      .flatMap(a => a.notas);
+    const mayor = Math.max(...notasPre2000);
+
+    console.log('Mayor nota de alumnos nacidos antes del 2000: ' + mayor);
+  }
 }
