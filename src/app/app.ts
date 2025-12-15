@@ -1,13 +1,7 @@
-import { Component, OnInit, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { Alumno } from './model/alumno';
+import { Component, OnInit, signal } from "@angular/core";
+import { Alumno } from "./model/alumno";
 
-@Component({
-  selector: 'app-root',
-  imports: [],
-  templateUrl: './app.html',
-  styleUrl: './app.css'
-})
+
 export class App implements OnInit{
   protected readonly title = signal('boletin3');
   public datos: number[] = [1,7,8,3,4,9];
